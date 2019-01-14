@@ -1,3 +1,13 @@
+/*********************************************************
+
+
+    Group : 42
+    
+    Members: Sayan Sinha (16CS10048)
+             Swastika Dutta (16CS10060)
+
+*********************************************************/
+
 #include<stdio.h> 
 #include<stdlib.h> 
 #include<unistd.h> 
