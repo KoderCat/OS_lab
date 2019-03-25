@@ -9,7 +9,7 @@
 #include <signal.h>
 #include <semaphore.h>
 #include <sys/msg.h>
-#include <unordered_map>
+// #include <unordered_map>
 #include <typeinfo>
 #include "headers.h"
 
@@ -153,7 +153,7 @@ int main()
 	    if((process_pid[i] = fork()) == 0)
 	    {
 	    	cout<<"key_3_str "<<key_3_str <<endl;
-	    	execlp("./process", "./process", key_3_str, key_5_str, p_i_str, m_str, i_str, (char *) NULL); // send others
+	    	execlp("xterm", "xterm", "-hold", "-e", "./process", key_3_str, key_5_str, p_i_str, m_str, i_str, (char *) NULL); // send others
 	    	printf("Failed to start process \n");
 	    	exit(EXIT_FAILURE);
 	    }

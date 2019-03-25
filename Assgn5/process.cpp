@@ -117,10 +117,7 @@ int main(int argc, char **argv)
 				exit(EXIT_FAILURE);
 			}
 		}
-		else
-		{
-			count ++;
-		}
+		count ++;
 	}
 	int reply = -9*m + id;
 	servaddr.sin_port = htons(6680); 
@@ -128,7 +125,7 @@ int main(int argc, char **argv)
 					(const struct sockaddr *) &servaddr, sizeof(servaddr)); 
 
 	// msgsnd(pg_id, &reply, sizeof(reply), 0);
-	printf("SCHEDULER END\n");
+	printf("PROCESS END\n");
 	exit(EXIT_SUCCESS); 
 
 }

@@ -100,9 +100,9 @@ int checkPT(int page_no, int i, int m, int SM_1, int &new_frame_no)
 	int found = 0;
 	for (int j = 0; j < m; j++)
 	{
-		if (pg[i*j*sizeof(page_entry)].page == page_no)
+		if (pg[i*m + j].page == page_no && pg[i*m + j].validity)
 		{
-			new_frame_no = pg[i*j*sizeof(page_entry)].frame;
+			new_frame_no = pg[i*m + j].frame;
 			found = 1;
 			TLB[page_no % s].memory_loc = new_frame_no;
 			TLB[page_no % s].page_no = page_no;
@@ -230,7 +230,7 @@ int main(int argc, char* argv[])
 			update_ff(id, m);
 			strcpy(message.msg, "TERMINATED");
 			cout<<"TERMINATE sent\n";
-    		servaddr.sin_port = htons(7433);
+    		servaddr.sin_port = htons(7434);
 			sendto(sockfd, &message, sizeof(message), 0, 
 						(const struct sockaddr *) &servaddr, sizeof(servaddr)); 
 
@@ -277,12 +277,12 @@ int main(int argc, char* argv[])
 		cout<<"Here 3\n";
 		handlePageFault(page_num, id, m, s, f, SM_1, SM_2, key_MQ_2);
 		cout<<"Sending page fault handled\n";
-		servaddr.sin_port = htons(7433);
+		servaddr.sin_port = htons(7434);
+		strcpy(message.msg, "PAGE FAULT HANDLED");
 		sendto(sockfd, &message, sizeof(message), 0, 
 					(const struct sockaddr *) &servaddr, sizeof(servaddr)); 
 
-		strcpy(message.msg, "PAGE FAULT HANDLED");
-		msgsnd(MQ_2, &message, sizeof(message), 0); 
+		// msgsnd(MQ_2, &message, sizeof(message), 0); 
 	}
 
 }

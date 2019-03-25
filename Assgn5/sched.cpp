@@ -28,6 +28,7 @@ int main(int argc, char **argv)
 	int mq_id = msgget(mq_t, 0666 | IPC_CREAT);
 
 	int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+	int sockfd2 = socket(AF_INET, SOCK_DGRAM, 0);
 	struct sockaddr_in servaddr, cliaddr; 
 
 	memset(&servaddr, 0, sizeof(servaddr)); 
@@ -43,6 +44,14 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE); 
     }  
 	
+    servaddr.sin_port = htons(7434);
+	if ( bind(sockfd2, (const struct sockaddr *)&servaddr,  
+	        sizeof(servaddr)) < 0 ) 
+	{ 
+	    perror("bind failed in sched"); 
+	    exit(EXIT_FAILURE); 
+	}   
+
 	while(1)
 	{
 		printf("INSIDE LOOP\n");
@@ -75,9 +84,11 @@ int main(int argc, char **argv)
 		socklen_t len = sizeof(cliaddr);
 
 		// msgrcv(mq_id, &message, sizeof(message), 1, 0);
-		recvfrom(sockfd, &message, sizeof(message), 0, 
+		usleep(250000);
+		int r = recvfrom(sockfd2, &message, sizeof(message), MSG_DONTWAIT, 
 					(struct sockaddr *) &cliaddr, &len); 
-
+		if (r < 0)
+			continue;
 		printf("SCHED :: Message is : %s\n", message.msg);
 		if(strcmp(message.msg,"PAGE FAULT HANDLED")==0)
 		{
